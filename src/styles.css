@@ -43,10 +43,10 @@ button{
   background:0 0
 }
 
-/*img{*/
-/*  max-width:100%;*/
-/*  height:auto*/
-/*}*/
+img{
+  max-width:100%;
+  height:auto;
+}
 
 p{
   margin:0
