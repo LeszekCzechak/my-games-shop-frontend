@@ -1,0 +1,17 @@
+<table class="table">
+  <thead class="alert alert-primary" role="alert">
+  <tr>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Units</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let product of products">
+    <td>{{product.name}}</td>
+    <td>{{product.unitPrice  |  currency: 'PLN'}}</td>
+    <td>{{product.unitsInStock}}</td>
+  </tr>
+  </tbody>
+</table>
+
