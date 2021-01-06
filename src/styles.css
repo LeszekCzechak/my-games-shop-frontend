@@ -43,10 +43,10 @@ button{
   background:0 0
 }
 
-img{
-  max-width:100%;
-  height:auto
-}
+/*img{*/
+/*  max-width:100%;*/
+/*  height:auto*/
+/*}*/
 
 p{
   margin:0
@@ -1034,4 +1034,8 @@ footer ul li{
     border:0;
     padding:8px 0
   }
+}
+
+.table-games {
+  padding-top: 75px;
 }
