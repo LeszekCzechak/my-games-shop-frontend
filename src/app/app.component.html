@@ -12,16 +12,10 @@
       <nav class="navbar-sidebar">
         <ul class="list-unstyled navbar-list">
           <li>
-            <a href="#">Books</a>
+            <a routerLink="/category/1" routerLinkActive="active-link">Books</a>
           </li>
           <li>
-            <a href="#">Coffee Mugs</a>
-          </li>
-          <li>
-            <a href="#">Mouse Pads</a>
-          </li>
-          <li>
-            <a href="#">Luggage Tags</a>
+            <a routerLink="/category/2" routerLinkActive="active-link">Coffee Mugs</a>
           </li>
         </ul>
       </nav>
@@ -56,25 +50,18 @@
           </div>
         </div>
       </header>
-      <div class="table-games">
-        <app-product-list></app-product-list>
-      </div>
-
-
+      <div class="table-games"></div>
     </div>
     <!-- END HEADER DESKTOP-->
 
-
     <!-- MAIN CONTENT-->
+    <router-outlet></router-outlet>
     <!-- END MAIN CONTENT-->
 
   </div>
-
 </div>
 
 <!-- END PAGE CONTAINER-->
-
-
 <footer>
   <ul>
     <li><a href="#">About Us</a></li>
