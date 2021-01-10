@@ -722,6 +722,12 @@ table.table.table-bordered th{
 .detail-section{
   margin-top:60px
 }
+
+.detail-img{
+  height: 100px;
+  /*width: 30%;*/
+}
+
 /**/
 
 /*
@@ -1038,4 +1044,8 @@ footer ul li{
 
 .table-games {
   padding-top: 75px;
+}
+
+.product-list-img {
+  width:80px;
 }
