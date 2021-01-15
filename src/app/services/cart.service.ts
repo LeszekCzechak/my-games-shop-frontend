@@ -16,7 +16,7 @@ export class CartService {
 
   addToCart(theCartItem: CartItem): void {
     let alreadyExistsInCart = false;
-    let existingCartItem: CartItem = undefined;
+    let existingCartItem: CartItem;
 
     if (this.cartItems.length > 0) {
       for (let tempCartItem of this.cartItems) {
@@ -34,10 +34,10 @@ export class CartService {
       this.cartItems.push(theCartItem);
     }
 
-    this.computeCartTotal();
+    this.computeCartTotals();
   }
 
-  private computeCartTotal(): void {
+  computeCartTotals(): void {
     let totalPriceValue = 0;
     let totalQuantityValue = 0;
 
