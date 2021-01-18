@@ -58,7 +58,7 @@ export class CartService {
     console.log(`----`);
   }
 
-  decrementFromCart(theCartItem: CartItem): void {
+  decrementQuantity(theCartItem: CartItem): void {
     theCartItem.quantity--;
 
     if (theCartItem.quantity === 0) {
@@ -68,7 +68,7 @@ export class CartService {
     }
   }
 
-  remove(theCartItem: CartItem) {
+  remove(theCartItem: CartItem): void {
     const itemIndex = this.cartItems.findIndex(tempCartItem => tempCartItem.id === theCartItem.id);
 
     if (itemIndex > -1) {
