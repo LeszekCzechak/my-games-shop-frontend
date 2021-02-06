@@ -28,41 +28,44 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
         firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
         lastName: new FormControl('', [Validators.required, Validators.minLength(2)]),
         email: new FormControl('',
-          [Validators.required,
-            Validators.email,
-            Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]=\\.[a-z]{2,4}$)]')])
+          [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')])
       }),
       shippingAddress: this.formBuilder.group({
         street: [''],
         city: [''],
+        state: [''],
         country: [''],
-        region: [''],
         zipCode: ['']
       }),
       billingAddress: this.formBuilder.group({
         street: [''],
         city: [''],
+        state: [''],
         country: [''],
-        region: [''],
         zipCode: ['']
       }),
       creditCard: this.formBuilder.group({
         cardType: [''],
         nameOnCard: [''],
-        cardNUmber: [''],
+        cardNumber: [''],
         securityCode: [''],
         expirationMonth: [''],
         expirationYear: ['']
       })
     });
 
-    const startMonth: number = new Date().getMonth() + 1;
-    console.log('startMonth:' + startMonth);
+    // populate credit card months
+
+    const startMonth
+      :
+      number = new Date().getMonth() + 1;
+    console.log('startMonth: ' + startMonth);
 
     this.myGamesShopService.getCreditCardMonths(startMonth).subscribe(
       data => {
@@ -71,11 +74,16 @@ export class CheckoutComponent implements OnInit {
       }
     );
 
+    // populate credit card years
+
     this.myGamesShopService.getCreditCardYears().subscribe(
       data => {
+        console.log('Retrieved credit card years: ' + JSON.stringify(data));
         this.creditCardYears = data;
       }
     );
+
+    // populate countries
 
     this.myGamesShopService.getCountries().subscribe(
       data => {
@@ -83,6 +91,29 @@ export class CheckoutComponent implements OnInit {
         this.countries = data;
       }
     );
+  }
+
+  get firstName(): AbstractControl { return this.checkoutFormGroup.get('customer.firstName'); }
+  get lastName(): AbstractControl { return this.checkoutFormGroup.get('customer.lastName'); }
+  get email(): AbstractControl { return this.checkoutFormGroup.get('customer.email'); }
+
+  copyShippingAddressToBillingAddress(event): void{
+
+    if (event.target.checked) {
+      this.checkoutFormGroup.controls.billingAddress
+        .setValue(this.checkoutFormGroup.controls.shippingAddress.value);
+
+      // bug fix for states
+      this.billingAddressStates = this.shippingAddressStates;
+
+    }
+    else {
+      this.checkoutFormGroup.controls.billingAddress.reset();
+
+      // bug fix for states
+      this.billingAddressStates = [];
+    }
+
   }
 
   onSubmit(): void {
@@ -93,57 +124,41 @@ export class CheckoutComponent implements OnInit {
     }
 
     console.log(this.checkoutFormGroup.get('customer').value);
-    console.log('The email address is: ' + this.checkoutFormGroup.get('customer').value.email);
-    console.log('The shipping address country is: ' + this.checkoutFormGroup.get('shippingAddress').value.country.name);
-    console.log('The shipping address state is: ' + this.checkoutFormGroup.get('shippingAddress').value.state.name);
-  }
+    console.log('The email address is ' + this.checkoutFormGroup.get('customer').value.email);
 
-  get firstName(): AbstractControl {
-    return this.checkoutFormGroup.get('customer.firstName');
-  }
+    console.log('The shipping address country is ' + this.checkoutFormGroup.get('shippingAddress').value.country.name);
+    console.log('The shipping address state is ' + this.checkoutFormGroup.get('shippingAddress').value.state.name);
 
-  get lastName(): AbstractControl {
-    return this.checkoutFormGroup.get('customer.lastName');
-  }
-
-  get email(): AbstractControl {
-    return this.checkoutFormGroup.get('customer.email');
-  }
-
-  copyShippingAddressToBillingAddress(event): void {
-    if (event.target.checked) {
-      this.checkoutFormGroup.controls.billingAddress
-        .setValue(this.checkoutFormGroup.controls.shippingAddress.value);
-
-      this.billingAddressStates = this.shippingAddressStates;
-
-    } else {
-      this.checkoutFormGroup.controls.billingAddress.reset();
-      this.billingAddressStates = [];
-    }
   }
 
   handleMonthsAndYears(): void {
+
     const creditCardFormGroup = this.checkoutFormGroup.get('creditCard');
 
     const currentYear: number = new Date().getFullYear();
     const selectedYear: number = Number(creditCardFormGroup.value.expirationYear);
 
+    // if the current year equals the selected year, then start with the current month
+
     let startMonth: number;
 
-    if (selectedYear === currentYear) {
+    if (currentYear === selectedYear) {
       startMonth = new Date().getMonth() + 1;
-    } else {
+    }
+    else {
       startMonth = 1;
     }
+
     this.myGamesShopService.getCreditCardMonths(startMonth).subscribe(
       data => {
+        console.log('Retrieved credit card months: ' + JSON.stringify(data));
         this.creditCardMonths = data;
       }
     );
   }
 
   getStates(formGroupName: string): void {
+
     const formGroup = this.checkoutFormGroup.get(formGroupName);
 
     const countryCode = formGroup.value.country.code;
@@ -154,12 +169,15 @@ export class CheckoutComponent implements OnInit {
 
     this.myGamesShopService.getStates(countryCode).subscribe(
       data => {
+
         if (formGroupName === 'shippingAddress') {
           this.shippingAddressStates = data;
-        } else {
+        }
+        else {
           this.billingAddressStates = data;
         }
 
+        // select first item by default
         formGroup.get('state').setValue(data[0]);
       }
     );
